@@ -266,7 +266,7 @@ voidfuncptr __MALLOC_HOOK_VOLATILE __malloc_initialize_hook EXTERNALLY_VISIBLE
 
 #endif
 
-#if defined DOUG_LEA_MALLOC || defined HAVE_UNEXEC
+#if defined DOUG_LEA_MALLOC
 
 /* Allocator-related actions to do just before and after unexec.  */
 
@@ -570,15 +570,9 @@ static void mem_delete (struct mem_node *);
 static void mem_delete_fixup (struct mem_node *);
 static struct mem_node *mem_find (void *);
 
-/* Addresses of staticpro'd variables.  Initialize it to a nonzero
-   value if we might unexec; otherwise some compilers put it into
-   BSS.  */
+/* Addresses of staticpro'd variables.  */
 
-Lisp_Object const *staticvec[NSTATICS]
-#ifdef HAVE_UNEXEC
-= {&Vpurify_flag}
-#endif
-  ;
+Lisp_Object const *staticvec[NSTATICS];
 
 /* Index of next unused slot in staticvec.  */
 
@@ -1071,11 +1065,7 @@ lisp_free (void *block)
    BLOCK_BYTES and guarantees they are aligned on a BLOCK_ALIGN boundary.  */
 
 /* Byte alignment of storage blocks.  */
-#ifdef HAVE_UNEXEC
-# define BLOCK_ALIGN (1 << 10)
-#else  /* !HAVE_UNEXEC */
 # define BLOCK_ALIGN (1 << 15)
-#endif
 verify (POWER_OF_2 (BLOCK_ALIGN));
 
 /* Use aligned_alloc if it or a simple substitute is available.
