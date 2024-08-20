@@ -4859,15 +4859,11 @@ static const hash_idx_t empty_hash_index_vector[] = {-1};
 
    Give the table initial capacity SIZE, 0 <= SIZE <= MOST_POSITIVE_FIXNUM.
 
-   WEAK specifies the weakness of the table.
-
-   If PURECOPY is non-nil, the table can be copied to pure storage via
-   `purecopy' when Emacs is being dumped. Such tables can no longer be
-   changed after purecopy.  */
+   WEAK specifies the weakness of the table.  */
 
 Lisp_Object
 make_hash_table (const struct hash_table_test *test, EMACS_INT size,
-		 hash_table_weakness_t weak, bool purecopy)
+		 hash_table_weakness_t weak)
 {
   eassert (SYMBOLP (test->name));
   eassert (0 <= size && size <= min (MOST_POSITIVE_FIXNUM, PTRDIFF_MAX));
@@ -4913,7 +4909,6 @@ make_hash_table (const struct hash_table_test *test, EMACS_INT size,
     }
 
   h->next_weak = NULL;
-  h->purecopy = purecopy;
   h->mutable = true;
   return make_lisp_hash_table (h);
 }
@@ -5747,11 +5742,6 @@ key, value, one of key or value, or both key and value, depending on
 WEAK.  WEAK t is equivalent to `key-and-value'.  Default value of WEAK
 is nil.
 
-:purecopy PURECOPY -- If PURECOPY is non-nil, the table can be copied
-to pure storage when Emacs is being dumped, making the contents of the
-table read only. Any further changes to purified tables will result
-in an error.
-
 The keywords arguments :rehash-threshold and :rehash-size are obsolete
 and ignored.
 
@@ -5778,9 +5768,9 @@ usage: (make-hash-table &rest KEYWORD-ARGS)  */)
   else
     testdesc = get_hash_table_user_test (test);
 
-  /* See if there's a `:purecopy PURECOPY' argument.  */
-  i = get_key_arg (QCpurecopy, nargs, args, used);
-  bool purecopy = i && !NILP (args[i]);
+  /* Ignore a `:purecopy PURECOPY' argument.  We used to accept those, but
+     they were only meaningful when we had the purespace. */
+  get_key_arg (QCpurecopy, nargs, args, used);
   /* See if there's a `:size SIZE' argument.  */
   i = get_key_arg (QCsize, nargs, args, used);
   Lisp_Object size_arg = i ? args[i] : Qnil;
@@ -5821,7 +5811,7 @@ usage: (make-hash-table &rest KEYWORD-ARGS)  */)
       }
 
   SAFE_FREE ();
-  return make_hash_table (testdesc, size, weak, purecopy);
+  return make_hash_table (testdesc, size, weak);
 }
 
 
