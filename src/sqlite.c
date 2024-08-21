@@ -899,7 +899,7 @@ syms_of_sqlite (void)
 
   DEFSYM (Qsqlite_error, "sqlite-error");
   Fput (Qsqlite_error, Qerror_conditions,
-	Fpurecopy (list2 (Qsqlite_error, Qerror)));
+	list2 (Qsqlite_error, Qerror));
   Fput (Qsqlite_error, Qerror_message,
 	build_string ("Database error"));
 
