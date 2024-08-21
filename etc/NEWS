@@ -31,6 +31,10 @@ host system supports SSE2) or '-fno-tree-sra' (if not).  These GCC
 options work around GCC bug 58416, which can cause Emacs to behave
 incorrectly in rare cases.
 
+** Unexec dumper removed.
+The traditional unexec dumper, deprecated since Emacs 27, has been
+removed.
+
 
 * Startup Changes in Emacs 31.1
 
