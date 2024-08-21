@@ -6106,7 +6106,7 @@ through `require'.  */);
 #if !IEEE_FLOATING_POINT
   for (int negative = 0; negative < 2; negative++)
     {
-      not_a_number[negative] = build_pure_c_string (&"-0.0e+NaN"[!negative]);
+      not_a_number[negative] = build_string (&"-0.0e+NaN"[!negative]);
       staticpro (&not_a_number[negative]);
     }
 #endif
