@@ -76,6 +76,7 @@ Like @samp{pdump}, but used while @dfn{bootstrapping} Emacs, when no
 previous Emacs binary and no @file{*.elc} byte-compiled Lisp files are
 available.  The produced dump file is usually named
 @file{bootstrap-emacs.pdmp} in this case.
+@end table
 
 @cindex preloaded Lisp files
 @vindex preloaded-file-list
