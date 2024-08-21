@@ -1380,12 +1380,6 @@ main (int argc, char **argv)
     run_time_remap (argv[0]);
 #endif
 
-/* If using unexmacosx.c (set by s/darwin.h), we must do this. */
-#if defined DARWIN_OS && defined HAVE_UNEXEC
-  if (!initialized)
-    unexec_init_emacs_zone ();
-#endif
-
   init_standard_fds ();
   atexit (close_output_streams);
 
