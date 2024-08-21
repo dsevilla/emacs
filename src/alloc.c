@@ -586,8 +586,10 @@ mmap_lisp_allowed_p (void)
 {
   /* If we can't store all memory addresses in our lisp objects, it's
      risky to let the heap use mmap and give us addresses from all
-     over our address space.  */
-  return pointers_fit_in_lispobj_p ();
+     over our address space.  We also can't use mmap for lisp objects
+     if we might dump: unexec doesn't preserve the contents of mmapped
+     regions.  */
+  return pointers_fit_in_lispobj_p () && !will_dump_with_unexec_p ();
 }
 #endif
 
