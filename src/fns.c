@@ -5742,8 +5742,8 @@ key, value, one of key or value, or both key and value, depending on
 WEAK.  WEAK t is equivalent to `key-and-value'.  Default value of WEAK
 is nil.
 
-The keywords arguments :rehash-threshold and :rehash-size are obsolete
-and ignored.
+The keywords arguments :rehash-threshold, :rehash-size, and :purecopy
+are obsolete and ignored.
 
 usage: (make-hash-table &rest KEYWORD-ARGS)  */)
   (ptrdiff_t nargs, Lisp_Object *args)
@@ -5768,9 +5768,6 @@ usage: (make-hash-table &rest KEYWORD-ARGS)  */)
   else
     testdesc = get_hash_table_user_test (test);
 
-  /* Ignore a `:purecopy PURECOPY' argument.  We used to accept those, but
-     they were only meaningful when we had the purespace. */
-  get_key_arg (QCpurecopy, nargs, args, used);
   /* See if there's a `:size SIZE' argument.  */
   i = get_key_arg (QCsize, nargs, args, used);
   Lisp_Object size_arg = i ? args[i] : Qnil;
@@ -5804,7 +5801,8 @@ usage: (make-hash-table &rest KEYWORD-ARGS)  */)
     if (!used[i])
       {
 	/* Ignore obsolete arguments.  */
-	if (EQ (args[i], QCrehash_threshold) || EQ (args[i], QCrehash_size))
+	if (EQ (args[i], QCrehash_threshold) || EQ (args[i], QCrehash_size) ||
+	    EQ (args[i], QCpurecopy))
 	  i++;
 	else
 	  signal_error ("Invalid argument list", args[i]);
