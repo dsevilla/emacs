@@ -549,6 +549,14 @@ Lisp_Object const *staticvec[NSTATICS];
 
 int staticidx;
 
+#ifndef HAVE_ALIGNED_ALLOC
+static void *
+pointer_align (void *ptr, int alignment)
+{
+  return (void *) ROUNDUP ((uintptr_t) ptr, alignment);
+}
+#endif
+
 /* Extract the pointer hidden within O.  */
 
 static ATTRIBUTE_NO_SANITIZE_UNDEFINED void *
